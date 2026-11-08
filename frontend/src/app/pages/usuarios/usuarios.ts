@@ -174,9 +174,10 @@ export class Usuarios implements OnInit {
     this.successMessage = '';
   }
 
-  eliminarUsuario(usuario: Usuario): void {
+  
+  eliminarUsuario(id: number): void {
     const confirmar = window.confirm(
-      `¿Deseas eliminar al usuario "${usuario.nombre} ${usuario.apellido}"?`
+      '¿Deseas eliminar este usuario?'
     );
 
     if (!confirmar) return;
@@ -185,7 +186,7 @@ export class Usuarios implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    this.api.delete('usuarios', usuario.id).subscribe({
+    this.api.delete('usuarios', id).subscribe({
       next: () => {
         this.successMessage = 'Usuario eliminado correctamente.';
         this.obtenerUsuarios();

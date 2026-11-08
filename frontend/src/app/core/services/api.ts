@@ -2,13 +2,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Api {
 
-  private readonly baseUrl = 'http://127.0.0.1:8000/api/';
+  private readonly baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -17,11 +18,10 @@ export class Api {
     return this.http.get<T>(`${this.baseUrl}${endpoint}/`);
   }
 
-  
-    getFiltered<T>(endpoint: string, params: Record<string, string>): Observable<T> {
+  // Consultar registros con filtros
+  getFiltered<T>(endpoint: string, params: Record<string, string>): Observable<T> {
     return this.http.get<T>(`${this.baseUrl}${endpoint}/`, { params });
-    }
-
+  }
 
   // Consultar un registro por su ID
   getById<T>(endpoint: string, id: number): Observable<T> {
