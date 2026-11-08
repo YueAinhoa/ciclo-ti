@@ -1,0 +1,151 @@
+
+<div class="page-container">
+
+  <div class="page-heading">
+    <div>
+      <h1>Administración de roles</h1>
+      <p>Gestiona los roles y permisos de los usuarios de CicloTI.</p>
+    </div>
+  </div>
+
+  <div class="content-grid">
+
+    <!-- Formulario -->
+    <section class="form-card">
+
+      <h2>{{ rolSeleccionado ? 'Editar rol' : 'Nuevo rol' }}</h2>
+      <p class="card-description">
+        Registra o modifica un rol del sistema.
+      </p>
+
+      <form (ngSubmit)="guardarRol()" #rolForm="ngForm">
+
+        <div class="form-group">
+          <label for="nombre">Nombre del rol</label>
+
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            [(ngModel)]="nombre"
+            placeholder="Ej. Administrador TI"
+            required
+            maxlength="100"
+          >
+        </div>
+
+        @if (errorMessage) {
+          <div class="message error">
+            {{ errorMessage }}
+          </div>
+        }
+
+        @if (successMessage) {
+          <div class="message success">
+            {{ successMessage }}
+          </div>
+        }
+
+        <div class="form-actions">
+
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="cargando || rolForm.invalid"
+          >
+            {{ rolSeleccionado ? 'Guardar cambios' : 'Crear rol' }}
+          </button>
+
+          @if (rolSeleccionado) {
+            <button
+              type="button"
+              class="btn-secondary"
+              (click)="limpiarFormulario()"
+            >
+              Cancelar
+            </button>
+          }
+
+        </div>
+
+      </form>
+
+    </section>
+
+    <!-- Tabla -->
+    <section class="table-card">
+
+      <div class="table-heading">
+        <div>
+          <h2>Roles registrados</h2>
+          <p class="card-description">
+            Total de roles: {{ roles.length }}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="obtenerRoles()"
+          [disabled]="cargando"
+        >
+          Actualizar
+        </button>
+      </div>
+
+      @if (cargando) {
+        <p class="empty-message">Cargando información...</p>
+      } @else if (roles.length === 0) {
+        <p class="empty-message">No hay roles registrados.</p>
+      } @else {
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre del rol</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (rol of roles; track rol.id) {
+                <tr>
+                  <td>{{ rol.id }}</td>
+                  <td>{{ rol.nombre }}</td>
+
+                  <td>
+                    <div class="action-buttons">
+
+                      <button
+                        type="button"
+                        class="btn-edit"
+                        (click)="editarRol(rol)"
+                      >
+                        Editar
+                      </button>
+
+                      <button
+                        type="button"
+                        class="btn-delete"
+                        (click)="eliminarRol(rol)"
+                      >
+                        Eliminar
+                      </button>
+
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+      }
+
+    </section>
+
+  </div>
+
+</div>

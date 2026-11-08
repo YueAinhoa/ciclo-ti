@@ -1,0 +1,174 @@
+
+<div class="page-header">
+  <div>
+    <h1>Usuarios</h1>
+    <p>Administración de usuarios del sistema</p>
+  </div>
+</div>
+
+<div class="content-card">
+  <h2>{{ usuarioSeleccionado ? 'Editar usuario' : 'Registrar usuario' }}</h2>
+
+  <form (ngSubmit)="guardarUsuario()">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input
+          type="text"
+          [(ngModel)]="nombre"
+          name="nombre"
+          placeholder="Ingrese el nombre"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Apellido</label>
+        <input
+          type="text"
+          [(ngModel)]="apellido"
+          name="apellido"
+          placeholder="Ingrese el apellido"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <input
+          type="email"
+          [(ngModel)]="correo"
+          name="correo"
+          placeholder="usuario@correo.com"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña {{ usuarioSeleccionado ? '(opcional)' : '' }}</label>
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Ingrese la contraseña"
+          [required]="!usuarioSeleccionado"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Rol</label>
+        <select [(ngModel)]="rolSeleccionado" name="rol" required>
+          <option [ngValue]="null">Seleccione un rol</option>
+          @for (item of roles; track item.id) {
+            <option [ngValue]="item.id">{{ item.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Área</label>
+        <select [(ngModel)]="areaSeleccionada" name="area" required>
+          <option [ngValue]="null">Seleccione un área</option>
+          @for (item of areas; track item.id) {
+            <option [ngValue]="item.id">{{ item.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Perfil de puesto</label>
+        <select [(ngModel)]="perfilSeleccionado" name="perfil_puesto" required>
+          <option [ngValue]="null">Seleccione un perfil</option>
+          @for (item of perfiles; track item.id) {
+            <option [ngValue]="item.id">{{ item.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      @if (usuarioSeleccionado) {
+        <div class="form-group">
+          <label>Estado</label>
+          <select [(ngModel)]="is_active" name="is_active">
+            <option [ngValue]="true">Activo</option>
+            <option [ngValue]="false">Inactivo</option>
+          </select>
+        </div>
+      }
+    </div>
+
+    @if (errorMessage) {
+      <p class="message error">{{ errorMessage }}</p>
+    }
+
+    @if (successMessage) {
+      <p class="message success">{{ successMessage }}</p>
+    }
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary" [disabled]="cargando">
+        {{ usuarioSeleccionado ? 'Guardar cambios' : 'Registrar usuario' }}
+      </button>
+
+      @if (usuarioSeleccionado) {
+        <button type="button" class="btn-secondary" (click)="limpiarFormulario()">
+          Cancelar
+        </button>
+      }
+    </div>
+  </form>
+</div>
+
+<div class="content-card">
+  <h2>Usuarios registrados</h2>
+
+  @if (cargando) {
+    <p>Cargando usuarios...</p>
+  } @else {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Área</th>
+            <th>Perfil</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (usuario of usuarios; track usuario.id) {
+            <tr>
+              <td>{{ usuario.nombre }} {{ usuario.apellido }}</td>
+              <td>{{ usuario.correo }}</td>
+              <td>{{ usuario.rol }}</td>
+              <td>{{ usuario.area }}</td>
+              <td>{{ usuario.perfil_puesto }}</td>
+              <td>
+                <span [class]="usuario.is_active ? 'status-active' : 'status-inactive'">
+                  {{ usuario.is_active ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td>
+                <div class="table-actions">
+                  <button class="btn-edit" (click)="editarUsuario(usuario)">
+                    Editar
+                  </button>
+                  <button class="btn-delete" (click)="eliminarUsuario(usuario.id)">
+                    Eliminar
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7">No hay usuarios registrados.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

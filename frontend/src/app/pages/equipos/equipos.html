@@ -1,0 +1,167 @@
+
+<div class="page-header">
+  <div>
+    <h1>Equipos</h1>
+    <p>Administración del inventario tecnológico</p>
+  </div>
+</div>
+
+<div class="content-card">
+  <h2>{{ equipoSeleccionado ? 'Editar equipo' : 'Registrar equipo' }}</h2>
+
+  <form (ngSubmit)="guardarEquipo()">
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>Código de inventario</label>
+        <input type="text" [(ngModel)]="codigo_inventario" name="codigo_inventario"
+          placeholder="Ejemplo: LAP-014" required />
+      </div>
+
+      <div class="form-group">
+        <label>Tipo de equipo</label>
+        <select [(ngModel)]="tipo_equipo" name="tipo_equipo" required>
+          <option [ngValue]="null">Seleccione un tipo</option>
+          @for (tipo of tipos; track tipo.id) {
+            <option [ngValue]="tipo.id">{{ tipo.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Marca</label>
+        <input type="text" [(ngModel)]="marca" name="marca" required />
+      </div>
+
+      <div class="form-group">
+        <label>Modelo</label>
+        <input type="text" [(ngModel)]="modelo" name="modelo" required />
+      </div>
+
+      <div class="form-group">
+        <label>Fecha de adquisición</label>
+        <input type="date" [(ngModel)]="fecha_adquisicion" name="fecha_adquisicion" required />
+      </div>
+
+      <div class="form-group">
+        <label>Costo de adquisición ($)</label>
+        <input type="number" [(ngModel)]="costo_adquisicion" name="costo_adquisicion"
+          min="0.01" step="0.01" required />
+      </div>
+
+      <div class="form-group">
+        <label>Estado</label>
+        <select [(ngModel)]="estado" name="estado" required>
+          @for (item of estados; track item) {
+            <option [value]="item">{{ item }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>RAM (GB)</label>
+        <input type="number" [(ngModel)]="ram_gb" name="ram_gb" min="1" required />
+      </div>
+
+      <div class="form-group">
+        <label>Almacenamiento (GB)</label>
+        <input type="number" [(ngModel)]="almacenamiento_gb" name="almacenamiento_gb" min="1" required />
+      </div>
+
+      <div class="form-group">
+        <label>Tipo de almacenamiento</label>
+        <select [(ngModel)]="tipo_almacenamiento" name="tipo_almacenamiento">
+          <option value="SSD">SSD</option>
+          <option value="HDD">HDD</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Nivel de CPU</label>
+        <input type="number" [(ngModel)]="nivel_cpu" name="nivel_cpu" min="1" required />
+      </div>
+
+      <div class="form-group">
+        <label>Salud de batería (%)</label>
+        <input type="number" [(ngModel)]="salud_bateria" name="salud_bateria"
+          min="0" max="100" required />
+      </div>
+
+      <div class="form-group">
+        <label>¿Contiene datos?</label>
+        <select [(ngModel)]="contiene_datos" name="contiene_datos">
+          <option [ngValue]="true">Sí</option>
+          <option [ngValue]="false">No</option>
+        </select>
+      </div>
+
+    </div>
+
+    @if (errorMessage) {
+      <p class="message error">{{ errorMessage }}</p>
+    }
+
+    @if (successMessage) {
+      <p class="message success">{{ successMessage }}</p>
+    }
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary" [disabled]="cargando">
+        {{ equipoSeleccionado ? 'Guardar cambios' : 'Registrar equipo' }}
+      </button>
+
+      @if (equipoSeleccionado) {
+        <button type="button" class="btn-secondary" (click)="limpiarFormulario()">
+          Cancelar
+        </button>
+      }
+    </div>
+  </form>
+</div>
+
+<div class="content-card">
+  <h2>Equipos registrados</h2>
+
+  @if (cargando) {
+    <p>Cargando equipos...</p>
+  } @else {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Tipo</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Estado</th>
+            <th>Costo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (equipo of equipos; track equipo.id) {
+            <tr>
+              <td>{{ equipo.codigo_inventario }}</td>
+              <td>{{ nombreTipo(equipo.tipo_equipo) }}</td>
+              <td>{{ equipo.marca }}</td>
+              <td>{{ equipo.modelo }}</td>
+              <td>{{ equipo.estado }}</td>
+              <td>{{ equipo.costo_adquisicion }}</td>
+              <td>
+                <div class="table-actions">
+                  <button class="btn-edit" (click)="editarEquipo(equipo)">Editar</button>
+                  <button class="btn-delete" (click)="eliminarEquipo(equipo.id)">Eliminar</button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7">No hay equipos registrados.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

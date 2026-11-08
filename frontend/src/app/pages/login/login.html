@@ -1,0 +1,68 @@
+
+<div class="login-container">
+  <div class="login-card">
+
+    <div class="login-brand">
+      <div class="brand-icon">CT</div>
+      <h1>CicloTI</h1>
+      <p>Gestión tecnológica</p>
+    </div>
+
+    <div class="login-heading">
+      <h2>Bienvenido</h2>
+      <p>Ingresa tus credenciales para continuar.</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+
+      <div class="form-group">
+        <label for="correo">Correo electrónico</label>
+
+        <input
+          type="email"
+          id="correo"
+          name="correo"
+          [(ngModel)]="correo"
+          placeholder="ejemplo@cicloti.com"
+          autocomplete="username"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Ingresa tu contraseña"
+          autocomplete="current-password"
+          required
+        >
+      </div>
+
+      @if (errorMessage) {
+        <div class="error-message">
+          {{ errorMessage }}
+        </div>
+      }
+
+      <button
+        type="submit"
+        class="login-button"
+        [disabled]="isLoading || loginForm.invalid"
+      >
+        {{ isLoading ? 'Verificando...' : 'Iniciar sesión' }}
+      </button>
+
+    </form>
+
+    <div class="login-footer">
+      <span>Acceso exclusivo para el administrador de TI</span>
+      <small>CicloTI © 2026</small>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,167 @@
+<div class="page-container">
+
+  <div class="page-heading">
+    <div>
+      <h1>Administración de tipos de equipo</h1>
+      <p>Gestiona las categorías y características de los equipos de CicloTI.</p>
+    </div>
+  </div>
+
+  <div class="content-grid">
+
+    <section class="form-card">
+
+      <h2>{{ tipoSeleccionado ? 'Editar tipo' : 'Nuevo tipo de equipo' }}</h2>
+
+      <p class="card-description">
+        Define la vida útil y frecuencia de mantenimiento.
+      </p>
+
+      <form (ngSubmit)="guardarTipo()" #tipoForm="ngForm">
+
+        <div class="form-group">
+          <label for="nombre">Nombre del tipo</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            [(ngModel)]="nombre"
+            placeholder="Ej. Laptop"
+            required
+            maxlength="100"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="vida">Vida útil (meses)</label>
+          <input
+            type="number"
+            id="vida"
+            name="vida"
+            [(ngModel)]="vida_util_meses"
+            min="1"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="frecuencia">Frecuencia de mantenimiento (días)</label>
+          <input
+            type="number"
+            id="frecuencia"
+            name="frecuencia"
+            [(ngModel)]="frecuencia_mantenimiento_dias"
+            min="1"
+            required
+          >
+        </div>
+
+        @if (errorMessage) {
+          <div class="message error">{{ errorMessage }}</div>
+        }
+
+        @if (successMessage) {
+          <div class="message success">{{ successMessage }}</div>
+        }
+
+        <div class="form-actions">
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="cargando || tipoForm.invalid"
+          >
+            {{ tipoSeleccionado ? 'Guardar cambios' : 'Crear tipo' }}
+          </button>
+
+          @if (tipoSeleccionado) {
+            <button
+              type="button"
+              class="btn-secondary"
+              (click)="limpiarFormulario()"
+            >
+              Cancelar
+            </button>
+          }
+        </div>
+
+      </form>
+
+    </section>
+
+    <section class="table-card">
+
+      <div class="table-heading">
+        <div>
+          <h2>Tipos de equipo registrados</h2>
+          <p class="card-description">
+            Total de tipos: {{ tipos.length }}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="obtenerTipos()"
+          [disabled]="cargando"
+        >
+          Actualizar
+        </button>
+      </div>
+
+      @if (cargando) {
+        <p class="empty-message">Cargando información...</p>
+      } @else if (tipos.length === 0) {
+        <p class="empty-message">No hay tipos registrados.</p>
+      } @else {
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Vida útil</th>
+                <th>Mantenimiento</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (tipo of tipos; track tipo.id) {
+                <tr>
+                  <td>{{ tipo.id }}</td>
+                  <td>{{ tipo.nombre }}</td>
+                  <td>{{ tipo.vida_util_meses }} meses</td>
+                  <td>{{ tipo.frecuencia_mantenimiento_dias }} días</td>
+
+                  <td>
+                    <div class="action-buttons">
+                      <button
+                        type="button"
+                        class="btn-edit"
+                        (click)="editarTipo(tipo)"
+                      >
+                        Editar
+                      </button>
+
+                      <button
+                        type="button"
+                        class="btn-delete"
+                        (click)="eliminarTipo(tipo)"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+      }
+
+    </section>
+
+  </div>
+</div>

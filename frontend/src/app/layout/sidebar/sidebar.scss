@@ -1,0 +1,98 @@
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background-color: #172554;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  box-sizing: border-box;
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px 30px;
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      background-color: #3b82f6;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .brand-text {
+      h2 {
+        margin: 0;
+        font-size: 20px;
+      }
+
+      span {
+        color: #cbd5e1;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .sidebar-navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .menu-label {
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin: 20px 8px 8px;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 12px;
+      color: #cbd5e1;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: background-color 0.2s, color 0.2s;
+
+      &:hover {
+        background-color: #263b68;
+        color: #ffffff;
+      }
+
+      &.active {
+        background-color: #2563eb;
+        color: #ffffff;
+      }
+
+      .menu-icon {
+        width: 22px;
+        text-align: center;
+        font-size: 18px;
+      }
+    }
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 20px 8px 0;
+    border-top: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: #cbd5e1;
+    font-size: 12px;
+
+    small {
+      color: #94a3b8;
+    }
+  }
+}

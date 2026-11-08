@@ -1,0 +1,181 @@
+<div class="page-container">
+
+  <div class="page-heading">
+    <div>
+      <h1>Administración de perfiles de puesto</h1>
+      <p>Define los requisitos tecnológicos mínimos para cada puesto.</p>
+    </div>
+  </div>
+
+  <div class="content-grid">
+
+    <section class="form-card">
+
+      <h2>{{ perfilSeleccionado ? 'Editar perfil' : 'Nuevo perfil' }}</h2>
+
+      <p class="card-description">
+        Configura los requisitos mínimos de hardware.
+      </p>
+
+      <form (ngSubmit)="guardarPerfil()" #perfilForm="ngForm">
+
+        <div class="form-group">
+          <label for="nombre">Nombre del perfil</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            [(ngModel)]="nombre"
+            placeholder="Ej. Desarrollador"
+            required
+            maxlength="100"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="ram">RAM mínima (GB)</label>
+          <input
+            type="number"
+            id="ram"
+            name="ram"
+            [(ngModel)]="ram_minima_gb"
+            min="1"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="almacenamiento">Almacenamiento mínimo (GB)</label>
+          <input
+            type="number"
+            id="almacenamiento"
+            name="almacenamiento"
+            [(ngModel)]="almacenamiento_minimo_gb"
+            min="1"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="cpu">Nivel mínimo de CPU</label>
+          <input
+            type="number"
+            id="cpu"
+            name="cpu"
+            [(ngModel)]="nivel_cpu_minimo"
+            min="1"
+            required
+          >
+        </div>
+
+        @if (errorMessage) {
+          <div class="message error">{{ errorMessage }}</div>
+        }
+
+        @if (successMessage) {
+          <div class="message success">{{ successMessage }}</div>
+        }
+
+        <div class="form-actions">
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="cargando || perfilForm.invalid"
+          >
+            {{ perfilSeleccionado ? 'Guardar cambios' : 'Crear perfil' }}
+          </button>
+
+          @if (perfilSeleccionado) {
+            <button
+              type="button"
+              class="btn-secondary"
+              (click)="limpiarFormulario()"
+            >
+              Cancelar
+            </button>
+          }
+        </div>
+
+      </form>
+
+    </section>
+
+    <section class="table-card">
+
+      <div class="table-heading">
+        <div>
+          <h2>Perfiles registrados</h2>
+          <p class="card-description">
+            Total de perfiles: {{ perfiles.length }}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="obtenerPerfiles()"
+          [disabled]="cargando"
+        >
+          Actualizar
+        </button>
+      </div>
+
+      @if (cargando) {
+        <p class="empty-message">Cargando información...</p>
+      } @else if (perfiles.length === 0) {
+        <p class="empty-message">No hay perfiles registrados.</p>
+      } @else {
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>RAM mínima</th>
+                <th>Almacenamiento</th>
+                <th>Nivel CPU</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (perfil of perfiles; track perfil.id) {
+                <tr>
+                  <td>{{ perfil.id }}</td>
+                  <td>{{ perfil.nombre }}</td>
+                  <td>{{ perfil.ram_minima_gb }} GB</td>
+                  <td>{{ perfil.almacenamiento_minimo_gb }} GB</td>
+                  <td>{{ perfil.nivel_cpu_minimo }}</td>
+
+                  <td>
+                    <div class="action-buttons">
+                      <button
+                        type="button"
+                        class="btn-edit"
+                        (click)="editarPerfil(perfil)"
+                      >
+                        Editar
+                      </button>
+
+                      <button
+                        type="button"
+                        class="btn-delete"
+                        (click)="eliminarPerfil(perfil)"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+      }
+
+    </section>
+
+  </div>
+</div>

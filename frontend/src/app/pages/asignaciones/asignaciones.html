@@ -1,0 +1,156 @@
+
+<div class="page-header">
+  <div>
+    <h1>Asignaciones</h1>
+    <p>Administración de equipos asignados a colaboradores</p>
+  </div>
+</div>
+
+<div class="content-card">
+  <h2>{{ asignacionSeleccionada ? 'Editar asignación' : 'Registrar asignación' }}</h2>
+
+  <form (ngSubmit)="guardarAsignacion()">
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>Área del colaborador</label>
+        <select
+          [(ngModel)]="areaSeleccionada"
+          name="areaSeleccionada"
+          (ngModelChange)="cargarColaboradores()"
+          required>
+          <option [ngValue]="null">Seleccione un área</option>
+          @for (area of areas; track area.id) {
+            <option [ngValue]="area.id">{{ area.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Colaborador</label>
+        <select [(ngModel)]="colaborador" name="colaborador" required>
+          <option [ngValue]="null">Seleccione un colaborador</option>
+          @for (usuario of colaboradores; track usuario.id) {
+            <option [ngValue]="usuario.id">
+              {{ usuario.nombre }} {{ usuario.apellido }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Tipo de equipo</label>
+        <select
+          [(ngModel)]="tipoSeleccionado"
+          name="tipoSeleccionado"
+          (ngModelChange)="cargarEquiposDisponibles()"
+          required>
+          <option [ngValue]="null">Seleccione un tipo de equipo</option>
+          @for (tipo of tipos; track tipo.id) {
+            <option [ngValue]="tipo.id">{{ tipo.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Equipo disponible</label>
+        <select [(ngModel)]="equipo" name="equipo" required>
+          <option [ngValue]="null">Seleccione un equipo</option>
+          @for (item of equipos; track item.id) {
+            <option [ngValue]="item.id">
+              {{ item.codigo_inventario }} - {{ item.marca }} {{ item.modelo }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Fecha de asignación</label>
+        <input
+          type="date"
+          [(ngModel)]="fecha_inicio"
+          name="fecha_inicio"
+          required />
+      </div>
+
+    </div>
+
+    @if (errorMessage) {
+      <p class="message error">{{ errorMessage }}</p>
+    }
+
+    @if (successMessage) {
+      <p class="message success">{{ successMessage }}</p>
+    }
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary" [disabled]="cargando">
+        {{ asignacionSeleccionada ? 'Guardar cambios' : 'Registrar asignación' }}
+      </button>
+
+      @if (asignacionSeleccionada) {
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="limpiarFormulario()">
+          Cancelar
+        </button>
+      }
+    </div>
+
+  </form>
+</div>
+
+<div class="content-card">
+  <h2>Asignaciones registradas</h2>
+
+  @if (cargando) {
+    <p>Cargando asignaciones...</p>
+  } @else {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Equipo</th>
+            <th>Colaborador</th>
+            <th>Fecha de inicio</th>
+            <th>Fecha de fin</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (asignacion of asignaciones; track asignacion.id) {
+            <tr>
+              <td>{{ asignacion.equipo }}</td>
+              <td>{{ asignacion.colaborador }}</td>
+              <td>{{ asignacion.fecha_inicio }}</td>
+              <td>{{ asignacion.fecha_fin || 'Sin finalizar' }}</td>
+              <td>{{ asignacion.vigente ? 'Vigente' : 'Finalizada' }}</td>
+              <td>
+                <div class="table-actions">
+                  <button
+                    class="btn-edit"
+                    (click)="editarAsignacion(asignacion)">
+                    Editar
+                  </button>
+                  <button
+                    class="btn-delete"
+                    (click)="eliminarAsignacion(asignacion.id)">
+                    Eliminar
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6">No hay asignaciones registradas.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
