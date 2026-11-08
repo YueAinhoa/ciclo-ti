@@ -2,6 +2,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
+
 
 export interface TokenResponse {
   access: string;
@@ -13,7 +15,7 @@ export interface TokenResponse {
 })
 export class Auth {
 
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/';
+  private readonly apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
